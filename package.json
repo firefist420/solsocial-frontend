@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "engines": {
+    "node": ">=20.0.0",
     "yarn": ">=4.8.1"
   },
   "dependencies": {
