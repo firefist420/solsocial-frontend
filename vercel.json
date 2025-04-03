@@ -1,7 +1,9 @@
 {
-  "build": {
-    "env": {
-      "NEXT_PUBLIC_ENV": "production"
-    }
-  }
+  "version": 2,
+  "builds": [{
+    "src": "package.json",
+    "use": "@vercel/next"
+  }],
+  "buildCommand": "yarn install && yarn rebuild && yarn build",
+  "installCommand": "yarn install --ignore-engines"
 }
