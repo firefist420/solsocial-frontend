@@ -1,19 +1,19 @@
 {
   "version": 2,
-  "builds": [{
-    "src": "package.json",
-    "use": "@vercel/next"
-  }],
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
   "routes": [
     {
       "src": "/feed",
-      "dest": "/feed",
-      "middleware": "auth"
+      "dest": "/feed"
     },
     {
       "src": "/token/(.*)",
-      "dest": "/token/[address]",
-      "middleware": "auth"
+      "dest": "/token/[address]"
     }
   ],
   "buildCommand": "yarn build",
