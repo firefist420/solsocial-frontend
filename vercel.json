@@ -4,6 +4,6 @@
     "src": "package.json",
     "use": "@vercel/next"
   }],
-  "buildCommand": "yarn install && yarn build",
+  "buildCommand": "yarn build",
   "installCommand": "yarn install"
 }
