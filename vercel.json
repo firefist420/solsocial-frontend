@@ -4,6 +4,6 @@
     "src": "package.json",
     "use": "@vercel/next"
   }],
-  "buildCommand": "yarn install && yarn rebuild && yarn build",
-  "installCommand": "yarn install --ignore-engines"
+  "buildCommand": "yarn install && yarn build",
+  "installCommand": "yarn install"
 }
