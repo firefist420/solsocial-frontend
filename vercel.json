@@ -4,6 +4,21 @@
     "src": "package.json",
     "use": "@vercel/next"
   }],
+  "routes": [
+    {
+      "src": "/feed",
+      "dest": "/feed",
+      "middleware": "auth"
+    },
+    {
+      "src": "/token/(.*)",
+      "dest": "/token/[address]",
+      "middleware": "auth"
+    }
+  ],
   "buildCommand": "yarn build",
-  "installCommand": "yarn install"
+  "installCommand": "yarn install",
+  "env": {
+    "NEXT_PUBLIC_HCAPTCHA_SITEKEY": "@hcaptcha_sitekey"
+  }
 }

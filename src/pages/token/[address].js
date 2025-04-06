@@ -1,44 +1,50 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import TokenHeader from '../../components/Token/TokenHeader'
-import TokenChart from '../../components/Token/TokenChart'
-import TokenInfo from '../../components/Token/TokenInfo'
-import TokenSocial from '../../components/Token/TokenSocial'
-import PostFeed from '../../components/Feed/PostFeed'
-import { Web3 } from '@solana/web3.js';
-const { Connection } = Web3;
+import dynamic from 'next/dynamic'
+import ErrorComponent from '../../components/UI/ErrorComponent'
+import SkeletonLoader from '../../components/UI/SkeletonLoader'
+
+const TokenHeader = dynamic(() => import('../../components/Token/TokenHeader'));
+const TokenChart = dynamic(() => import('../../components/Token/TokenChart'));
+const TokenInfo = dynamic(() => import('../../components/Token/TokenInfo'));
+const TokenSocial = dynamic(() => import('../../components/Token/TokenSocial'));
+const PostFeed = dynamic(() => import('../../components/Feed/PostFeed'));
 
 export default function TokenPage() {
   const router = useRouter()
   const { address } = router.query
   const [tokenData, setTokenData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (address) {
+      if (!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
+        setError('Invalid token address');
+        setLoading(false);
+        return;
+      }
       fetchTokenData()
     }
   }, [address])
 
   const fetchTokenData = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`/api/tokens/${address}`)
+      if (!response.ok) throw new Error('Failed to fetch token data');
       const data = await response.json()
       setTokenData(data)
-    } catch (error) {
-      console.error('Error fetching token data:', error)
+    } catch (err) {
+      setError(err.message)
     } finally {
       setLoading(false)
     }
   }
 
-  if (loading) {
-    return <div>Loading token data...</div>
-  }
-
-  if (!tokenData) {
-    return <div>Token not found</div>
-  }
+  if (loading) return <SkeletonLoader count={5} />
+  if (error) return <ErrorComponent message={error} />
+  if (!tokenData) return <ErrorComponent message="Token not found" />
 
   return (
     <div className="token-page">

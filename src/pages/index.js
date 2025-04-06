@@ -1,12 +1,15 @@
 import { useWallet } from '@solana/wallet-adapter-react';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+
+const HCaptcha = dynamic(() => import('@hcaptcha/react-hcaptcha'), { ssr: false });
+const WalletMultiButton = dynamic(() => import('@solana/wallet-adapter-react-ui').then(mod => mod.WalletMultiButton), { ssr: false });
 
 export default function Home() {
   const { connected } = useWallet();
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [captchaExpired, setCaptchaExpired] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,8 +24,13 @@ export default function Home() {
         <h1>Welcome to SolSocial</h1>
         <HCaptcha
           sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY}
-          onVerify={() => setCaptchaVerified(true)}
+          onVerify={() => {
+            setCaptchaVerified(true);
+            setCaptchaExpired(false);
+          }}
+          onExpire={() => setCaptchaExpired(true)}
         />
+        {captchaExpired && <p className="error">Captcha expired. Please verify again.</p>}
         {captchaVerified && (
           <WalletMultiButton className="connect-button" />
         )}
@@ -43,6 +51,10 @@ export default function Home() {
           text-align: center;
           max-width: 500px;
           width: 100%;
+        }
+        .error {
+          color: #ff6b6b;
+          margin: 0.5rem 0;
         }
       `}</style>
     </div>
