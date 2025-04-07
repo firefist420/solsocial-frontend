@@ -4,11 +4,11 @@ import dynamic from 'next/dynamic'
 import ErrorComponent from '../../components/UI/ErrorComponent'
 import SkeletonLoader from '../../components/UI/SkeletonLoader'
 
-const TokenHeader = dynamic(() => import('../../components/Token/TokenHeader'));
-const TokenChart = dynamic(() => import('../../components/Token/TokenChart'));
-const TokenInfo = dynamic(() => import('../../components/Token/TokenInfo'));
-const TokenSocial = dynamic(() => import('../../components/Token/TokenSocial'));
-const PostFeed = dynamic(() => import('../../components/Feed/PostFeed'));
+const TokenHeader = dynamic(() => import('../../components/Token/TokenHeader'))
+const TokenChart = dynamic(() => import('../../components/Token/TokenChart'))
+const TokenInfo = dynamic(() => import('../../components/Token/TokenInfo'))
+const TokenSocial = dynamic(() => import('../../components/Token/TokenSocial'))
+const PostFeed = dynamic(() => import('../../components/Feed/PostFeed'))
 
 export default function TokenPage() {
   const router = useRouter()
@@ -20,9 +20,9 @@ export default function TokenPage() {
   useEffect(() => {
     if (address) {
       if (!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
-        setError('Invalid token address');
-        setLoading(false);
-        return;
+        setError('Invalid token address')
+        setLoading(false)
+        return
       }
       fetchTokenData()
     }
@@ -30,9 +30,9 @@ export default function TokenPage() {
 
   const fetchTokenData = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       const response = await fetch(`/api/tokens/${address}`)
-      if (!response.ok) throw new Error('Failed to fetch token data');
+      if (!response.ok) throw new Error('Failed to fetch token data')
       const data = await response.json()
       setTokenData(data)
     } catch (err) {
