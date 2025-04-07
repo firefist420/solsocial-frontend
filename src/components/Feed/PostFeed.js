@@ -1,21 +1,21 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 export default function PostFeed({ tokenAddress }) {
-  const [posts, setPosts] = useState([])
-  const [newPost, setNewPost] = useState('')
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState('');
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!newPost.trim()) return
+    e.preventDefault();
+    if (!newPost.trim()) return;
     
     setPosts([{ 
       id: Date.now(), 
       content: newPost,
       timestamp: new Date().toISOString(),
       tokenAddress 
-    }, ...posts])
-    setNewPost('')
-  }
+    }, ...posts]);
+    setNewPost('');
+  };
 
   return (
     <div className="post-feed">
@@ -45,5 +45,5 @@ export default function PostFeed({ tokenAddress }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
