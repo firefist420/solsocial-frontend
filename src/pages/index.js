@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
@@ -13,15 +13,9 @@ export default function Home() {
   const { connected } = useWallet();
   const router = useRouter();
   const [captchaToken, setCaptchaToken] = useState(null);
-  const [hcaptchaReady, setHcaptchaReady] = useState(false);
+  const hcaptchaRef = useRef(null);
 
   useEffect(() => {
-    // Check if hCaptcha is already loaded
-    if (window.hcaptcha) {
-      setHcaptchaReady(true);
-      return;
-    }
-
     // Load hCaptcha script
     const script = document.createElement('script');
     script.src = `https://js.hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad`;
@@ -29,16 +23,20 @@ export default function Home() {
     script.defer = true;
     
     window.hcaptchaOnLoad = () => {
-      setHcaptchaReady(true);
+      if (window.hcaptcha) {
+        hcaptchaRef.current = window.hcaptcha.render('hcaptcha-container', {
+          sitekey: process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY,
+          theme: 'dark',
+          callback: (token) => setCaptchaToken(token)
+        });
+      }
     };
 
     document.body.appendChild(script);
 
     return () => {
-      if (window.hcaptchaOnLoad) {
-        delete window.hcaptchaOnLoad;
-      }
       document.body.removeChild(script);
+      if (window.hcaptchaOnLoad) delete window.hcaptchaOnLoad;
     };
   }, []);
 
@@ -49,53 +47,21 @@ export default function Home() {
   }, [connected, captchaToken, router]);
 
   return (
-    <div className="welcome-container">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 bg-cover bg-center" style={{ backgroundImage: "url('/images/background.jpg')" }}>
       <Head>
         <title>SolSocial</title>
+        <script src={`https://js.hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad`} async defer />
       </Head>
-      
-      <div className="welcome-content">
-        <h1>Welcome to SolSocial</h1>
+
+      <div className="bg-black bg-opacity-80 p-8 rounded-lg max-w-md w-full text-center">
+        <h1 className="text-3xl font-bold text-white mb-6">Welcome to SolSocial</h1>
         
-        {hcaptchaReady ? (
-          <div
-            className="h-captcha"
-            data-sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY}
-            data-callback={(token) => setCaptchaToken(token)}
-            data-error-callback={() => console.error('hCaptcha error')}
-          />
-        ) : (
-          <p className="text-yellow-500">Loading security verification...</p>
-        )}
+        <div id="hcaptcha-container" className="flex justify-center mb-4"></div>
 
         {captchaToken && (
-          <div className="mt-4">
-            <WalletMultiButton className="connect-button" />
-          </div>
+          <WalletMultiButton className="mx-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" />
         )}
       </div>
-
-      <style jsx>{`
-        .welcome-container {
-          background-image: url('/images/background.jpg');
-          background-size: cover;
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .welcome-content {
-          background: rgba(0, 0, 0, 0.8);
-          padding: 2rem;
-          border-radius: 1rem;
-          text-align: center;
-          max-width: 500px;
-          width: 100%;
-        }
-        .connect-button {
-          margin: 0 auto;
-        }
-      `}</style>
     </div>
   );
 }
