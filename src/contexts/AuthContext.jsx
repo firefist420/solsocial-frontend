@@ -1,42 +1,42 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { createContext, useContext, useState, useEffect } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const wallet = useWallet()
-  const [userProfile, setUserProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const wallet = useWallet();
+  const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (wallet.connected && wallet.publicKey) {
-      fetchUserProfile(wallet.publicKey.toString())
+      fetchUserProfile(wallet.publicKey.toString());
     } else {
-      setUserProfile(null)
-      setLoading(false)
+      setUserProfile(null);
+      setLoading(false);
     }
-  }, [wallet.connected, wallet.publicKey])
+  }, [wallet.connected, wallet.publicKey]);
 
   const fetchUserProfile = async (publicKey) => {
     try {
-      setLoading(true)
-      const response = await fetch(`/api/users/${publicKey}`)
-      const data = await response.json()
-      setUserProfile(data)
+      setLoading(true);
+      const response = await fetch(`/api/users/${publicKey}`);
+      const data = await response.json();
+      setUserProfile(data);
     } catch (error) {
-      console.error('Error fetching user profile:', error)
+      console.error('Error fetching user profile:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <AuthContext.Provider value={{ wallet, userProfile, loading, setUserProfile }}>
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }

@@ -10,7 +10,7 @@ const PostList = dynamic(() => import('../components/Feed/PostList'), {
   ssr: false 
 });
 
-export default function Feed() {
+export default function FeedPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 

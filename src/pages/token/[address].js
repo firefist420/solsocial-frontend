@@ -1,50 +1,50 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic'
-import ErrorComponent from '../../components/UI/ErrorComponent'
-import SkeletonLoader from '../../components/UI/SkeletonLoader'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import ErrorComponent from '../../components/UI/ErrorComponent';
+import SkeletonLoader from '../../components/UI/SkeletonLoader';
 
-const TokenHeader = dynamic(() => import('../../components/Token/TokenHeader'))
-const TokenChart = dynamic(() => import('../../components/Token/TokenChart'))
-const TokenInfo = dynamic(() => import('../../components/Token/TokenInfo'))
-const TokenSocial = dynamic(() => import('../../components/Token/TokenSocial'))
-const PostFeed = dynamic(() => import('../../components/Feed/PostFeed'))
+const TokenHeader = dynamic(() => import('../../components/Token/TokenHeader'));
+const TokenChart = dynamic(() => import('../../components/Token/TokenChart'));
+const TokenInfo = dynamic(() => import('../../components/Token/TokenInfo'));
+const TokenSocial = dynamic(() => import('../../components/Token/TokenSocial'));
+const PostFeed = dynamic(() => import('../../components/Feed/PostFeed'));
 
 export default function TokenPage() {
-  const router = useRouter()
-  const { address } = router.query
-  const [tokenData, setTokenData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const router = useRouter();
+  const { address } = router.query;
+  const [tokenData, setTokenData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (address) {
       if (!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
-        setError('Invalid token address')
-        setLoading(false)
-        return
+        setError('Invalid token address');
+        setLoading(false);
+        return;
       }
-      fetchTokenData()
+      fetchTokenData();
     }
-  }, [address])
+  }, [address]);
 
   const fetchTokenData = async () => {
     try {
-      setLoading(true)
-      const response = await fetch(`/api/tokens/${address}`)
-      if (!response.ok) throw new Error('Failed to fetch token data')
-      const data = await response.json()
-      setTokenData(data)
+      setLoading(true);
+      const response = await fetch(`/api/tokens/${address}`);
+      if (!response.ok) throw new Error('Failed to fetch token data');
+      const data = await response.json();
+      setTokenData(data);
     } catch (err) {
-      setError(err.message)
+      setError(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  if (loading) return <SkeletonLoader count={5} />
-  if (error) return <ErrorComponent message={error} />
-  if (!tokenData) return <ErrorComponent message="Token not found" />
+  if (loading) return <SkeletonLoader count={5} />;
+  if (error) return <ErrorComponent message={error} />;
+  if (!tokenData) return <ErrorComponent message="Token not found" />;
 
   return (
     <div className="token-page">
@@ -81,5 +81,5 @@ export default function TokenPage() {
         }
       `}</style>
     </div>
-  )
+  );
 }

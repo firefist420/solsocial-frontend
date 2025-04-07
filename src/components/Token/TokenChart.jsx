@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 export default function TokenChart({ tokenAddress }) {
-  const [iframeError, setIframeError] = useState(false)
+  const [iframeError, setIframeError] = useState(false);
 
   if (iframeError) {
-    return <div className="chart-error">Chart unavailable</div>
+    return <div className="chart-error">Chart unavailable</div>;
   }
 
   return (
@@ -28,5 +28,5 @@ export default function TokenChart({ tokenAddress }) {
         }
       `}</style>
     </div>
-  )
+  );
 }

@@ -16,7 +16,6 @@ export default function Home() {
   const hcaptchaRef = useRef(null);
 
   useEffect(() => {
-    // Load hCaptcha script
     const script = document.createElement('script');
     script.src = `https://js.hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad`;
     script.async = true;
