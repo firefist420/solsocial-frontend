@@ -1,26 +1,44 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import Navbar from '../components/UI/Navbar';
-import SkeletonLoader from '../components/UI/SkeletonLoader';
+import AppLayout from '../components/UI/AppLayout';
+import VideoFeed from '../components/Feed/VideoFeed';
 
 const PostForm = dynamic(() => import('../components/Feed/PostForm'), { 
-  ssr: false 
-});
-const PostList = dynamic(() => import('../components/Feed/PostList'), { 
   ssr: false 
 });
 
 export default function FeedPage() {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('posts');
+  const [videos, setVideos] = useState([]);
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <Navbar />
-      <div className="max-w-4xl mx-auto p-4">
-        <PostForm setPosts={setPosts} />
-        {loading ? <SkeletonLoader count={3} /> : <PostList posts={posts} />}
+    <AppLayout>
+      <div className="flex-1">
+        <div className="flex border-b border-gray-800">
+          <button 
+            onClick={() => setActiveTab('posts')}
+            className={`px-4 py-2 ${activeTab === 'posts' ? 'border-b-2 border-purple-500' : ''}`}
+          >
+            Posts
+          </button>
+          <button 
+            onClick={() => setActiveTab('videos')}
+            className={`px-4 py-2 ${activeTab === 'videos' ? 'border-b-2 border-purple-500' : ''}`}
+          >
+            Videos
+          </button>
+        </div>
+        
+        {activeTab === 'posts' ? (
+          <div className="p-4">
+            <PostForm setPosts={setPosts} />
+            <PostList posts={posts} />
+          </div>
+        ) : (
+          <VideoFeed videos={videos} />
+        )}
       </div>
-    </div>
+    </AppLayout>
   );
 }
