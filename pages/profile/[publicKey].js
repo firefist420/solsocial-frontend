@@ -1,19 +1,35 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import AppLayout from '../../components/UI/AppLayout';
 import UserProfile from '../../components/Profile/UserProfile';
-import NFTGallery from '../../components/Profile/NFTGallery';
 
-const PostList = dynamic(() => import('../../components/Feed/PostList'));
+const NFTGallery = dynamic(() => import('../../components/Profile/NFTGallery'), {
+  ssr: false,
+  loading: () => <div>Loading NFTs...</div>
+});
+
+const PostList = dynamic(() => import('../../components/Feed/PostList'), {
+  ssr: false,
+  loading: () => <div>Loading posts...</div>
+});
+
 const ProfileCustomizer = dynamic(() => import('../../components/Profile/ProfileCustomizer'), { 
-  ssr: false 
+  ssr: false,
+  loading: () => <div>Loading customizer...</div>
 });
 
 export default function ProfilePage() {
   const router = useRouter();
   const { publicKey } = router.query;
   const [activeTab, setActiveTab] = useState('profile');
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
 
   return (
     <AppLayout>
