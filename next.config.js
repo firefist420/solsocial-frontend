@@ -1,7 +1,7 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['assets.dexscreener.com'],
+    domains: ['assets.dexscreener.com', 'your-image-host.com'],
   },
   env: {
     NEXT_PUBLIC_HCAPTCHA_SITEKEY: process.env.HCAPTCHA_SITEKEY,

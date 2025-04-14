@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.token-header {
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e2e8f0;
-}
-
 body {
   @apply bg-gray-900 text-white;
 }
@@ -19,4 +13,22 @@ body {
 
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out forwards;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded-full;
+}
+
+.h-captcha {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
 }
