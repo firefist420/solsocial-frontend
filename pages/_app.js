@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(() => [
     new PhantomWalletAdapter(),
-    new SolflareWalletAdapter(),
+    new SolflareWalletAdapter()
   ], [network]);
 
   return (

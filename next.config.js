@@ -3,10 +3,6 @@ module.exports = {
   images: {
     domains: ['assets.dexscreener.com', 'arweave.net', 'nftstorage.link'],
   },
-  experimental: {
-    esmExternals: 'loose',
-    serverComponentsExternalPackages: ['mongoose']
-  },
   webpack: (config) => {
     config.resolve.fallback = {
       fs: false,
@@ -17,5 +13,8 @@ module.exports = {
       path: require.resolve('path-browserify')
     };
     return config;
+  },
+  experimental: {
+    esmExternals: 'loose'
   }
 };
