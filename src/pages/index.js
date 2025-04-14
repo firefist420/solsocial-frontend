@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 const WalletMultiButton = dynamic(
   () => import('@solana/wallet-adapter-react-ui').then((mod) => mod.WalletMultiButton),
@@ -9,9 +10,16 @@ const WalletMultiButton = dynamic(
 );
 
 export default function Home() {
-  const { connected } = useWallet();
+  const { connected, publicKey } = useWallet();
+  const router = useRouter();
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const [hcaptchaLoaded, setHcaptchaLoaded] = useState(false);
+
+  useEffect(() => {
+    if (connected && publicKey) {
+      router.push('/feed');
+    }
+  }, [connected, publicKey, router]);
 
   useEffect(() => {
     const script = document.createElement('script');
