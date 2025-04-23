@@ -56,17 +56,13 @@ export default function Home() {
         <div className="bg-black bg-opacity-80 p-8 rounded-lg max-w-md w-full text-center">
           <h1 className="text-3xl font-bold text-white mb-6">Welcome to SolSocial</h1>
           
-          {!captchaVerified && hcaptchaLoaded && (
-            <div className="h-captcha mb-4 flex justify-center" 
-                 data-sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY}
-                 data-callback={onCaptchaVerify} />
-          )}
+          <div className="h-captcha mb-4 flex justify-center" 
+               data-sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY}
+               data-callback={onCaptchaVerify} />
 
-          {captchaVerified && (
-            <div className="animate-fade-in">
-              <WalletMultiButton className="mx-auto bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" />
-            </div>
-          )}
+          <div className={`transition-opacity duration-500 ${captchaVerified ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}>
+            <WalletMultiButton className="mx-auto bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" />
+          </div>
         </div>
       </div>
     </>
