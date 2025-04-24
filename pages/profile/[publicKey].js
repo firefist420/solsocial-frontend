@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import AppLayout from '../../../components/UI/AppLayout';
-import ErrorComponent from '../../../components/UI/ErrorComponent';
+import AppLayout from '../../components/UI/AppLayout';
+import ErrorComponent from '../../components/UI/ErrorComponent';
 
-const NFTGallery = dynamic(() => import('../../../components/Profile/NFTGallery'), {
+const NFTGallery = dynamic(() => import('../../components/Profile/NFTGallery'), {
   ssr: false,
   loading: () => <div>Loading NFTs...</div>
 });
