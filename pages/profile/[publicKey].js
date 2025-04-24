@@ -11,12 +11,14 @@ const NFTGallery = dynamic(() => import('../../components/Profile/NFTGallery'), 
 export async function getStaticPaths() {
   return {
     paths: [],
-    fallback: true
+    fallback: 'blocking'
   };
 }
 
-export async function getStaticProps({ params }) {
-  if (!params?.publicKey) {
+export async function getStaticProps(context) {
+  const { publicKey } = context.params;
+
+  if (!publicKey) {
     return {
       notFound: true
     };
@@ -24,8 +26,9 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
-      publicKey: params.publicKey
-    }
+      publicKey
+    },
+    revalidate: 60
   };
 }
 
@@ -37,7 +40,7 @@ export default function NFTProfilePage({ publicKey }) {
   }
 
   if (!publicKey) {
-    return <ErrorComponent message="No wallet address provided" />;
+    return <ErrorComponent message="Invalid wallet address" />;
   }
 
   return (

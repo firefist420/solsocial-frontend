@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useConnection } from '@solana/wallet-adapter-react';
 
 export default function NFTGallery({ publicKey }) {
-  const { connection } = useConnection();
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +12,7 @@ export default function NFTGallery({ publicKey }) {
         const response = await fetch(`/api/nfts/${publicKey}`);
         if (!response.ok) throw new Error('Failed to fetch NFTs');
         const data = await response.json();
-        setNfts(data);
+        setNfts(data.nfts || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -23,7 +21,7 @@ export default function NFTGallery({ publicKey }) {
     };
 
     if (publicKey) fetchNFTs();
-  }, [publicKey, connection]);
+  }, [publicKey]);
 
   if (loading) return <div>Loading NFTs...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -32,7 +30,7 @@ export default function NFTGallery({ publicKey }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {nfts.map((nft) => (
-        <div key={nft.mint} className="border rounded-lg overflow-hidden">
+        <div key={nft.id} className="border rounded-lg overflow-hidden">
           <img 
             src={nft.image} 
             alt={nft.name} 
