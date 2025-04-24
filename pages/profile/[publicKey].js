@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import AppLayout from '../../components/UI/AppLayout';
 import UserProfile from '../../components/Profile/UserProfile';
+import ErrorComponent from '../../components/UI/ErrorComponent';
 
 const NFTGallery = dynamic(() => import('../../components/Profile/NFTGallery'), {
   ssr: false,
@@ -30,6 +31,7 @@ export default function ProfilePage() {
   }, []);
 
   if (!isClient) return null;
+  if (!publicKey) return <ErrorComponent message="No wallet address provided" />;
 
   return (
     <AppLayout>
@@ -39,19 +41,19 @@ export default function ProfilePage() {
         <div className="flex mt-6 border-b border-gray-800">
           <button 
             onClick={() => setActiveTab('profile')}
-            className={`px-4 py-2 ${activeTab === 'profile' ? 'border-b-2 border-purple-500' : ''}`}
+            className={`px-4 py-2 ${activeTab === 'profile' ? 'border-b-2 border-purple-500 text-purple-500' : 'text-gray-400'}`}
           >
             Profile
           </button>
           <button 
             onClick={() => setActiveTab('nfts')}
-            className={`px-4 py-2 ${activeTab === 'nfts' ? 'border-b-2 border-purple-500' : ''}`}
+            className={`px-4 py-2 ${activeTab === 'nfts' ? 'border-b-2 border-purple-500 text-purple-500' : 'text-gray-400'}`}
           >
             NFTs
           </button>
           <button 
             onClick={() => setActiveTab('customize')}
-            className={`px-4 py-2 ${activeTab === 'customize' ? 'border-b-2 border-purple-500' : ''}`}
+            className={`px-4 py-2 ${activeTab === 'customize' ? 'border-b-2 border-purple-500 text-purple-500' : 'text-gray-400'}`}
           >
             Customize
           </button>
@@ -59,7 +61,7 @@ export default function ProfilePage() {
         
         <div className="mt-6">
           {activeTab === 'profile' && <PostList posts={[]} />}
-          {activeTab === 'nfts' && <NFTGallery publicKey={publicKey} />}
+          {activeTab === 'nfts' && publicKey && <NFTGallery publicKey={publicKey} />}
           {activeTab === 'customize' && <ProfileCustomizer />}
         </div>
       </div>
