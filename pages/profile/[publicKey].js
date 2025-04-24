@@ -20,10 +20,18 @@ const ProfileCustomizer = dynamic(() => import('../../components/Profile/Profile
   loading: () => <div>Loading customizer...</div>
 });
 
-export default function ProfilePage() {
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      publicKey: context.params?.publicKey || null
+    }
+  };
+}
+
+export default function ProfilePage({ publicKey: initialPublicKey }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('profile');
-  const [publicKey, setPublicKey] = useState(null);
+  const [publicKey, setPublicKey] = useState(initialPublicKey);
 
   useEffect(() => {
     if (router.isReady && router.query.publicKey) {
@@ -31,7 +39,6 @@ export default function ProfilePage() {
     }
   }, [router.isReady, router.query.publicKey]);
 
-  if (!router.isReady) return <div>Loading...</div>;
   if (!publicKey) return <ErrorComponent message="No wallet address provided" />;
 
   return (
