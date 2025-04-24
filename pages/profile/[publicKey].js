@@ -11,11 +11,17 @@ const NFTGallery = dynamic(() => import('../../components/Profile/NFTGallery'), 
 export async function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking'
+    fallback: true
   };
 }
 
 export async function getStaticProps({ params }) {
+  if (!params?.publicKey) {
+    return {
+      notFound: true
+    };
+  }
+
   return {
     props: {
       publicKey: params.publicKey
@@ -25,6 +31,7 @@ export async function getStaticProps({ params }) {
 
 export default function NFTProfilePage({ publicKey }) {
   const router = useRouter();
+
   if (router.isFallback) {
     return <div>Loading...</div>;
   }

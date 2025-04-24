@@ -17,11 +17,5 @@ module.exports = {
   experimental: {
     esmExternals: 'loose'
   },
-  output: 'standalone',
-  exportPathMap: async function () {
-    return {
-      '/': { page: '/' },
-      '/profile/nfts/[publicKey]': { page: '/profile/nfts/[publicKey]' }
-    };
-  }
+  output: 'standalone'
 };
