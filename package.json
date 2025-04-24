@@ -19,6 +19,8 @@
     "@solana/wallet-adapter-react": "^0.15.23",
     "@solana/wallet-adapter-react-ui": "^0.9.23",
     "@solana/wallet-adapter-solflare": "^0.6.23",
+    "@solana/wallet-adapter-backpack": "^0.1.0",
+    "@solana/wallet-adapter-glow": "^0.1.0",
     "@solana/wallet-adapter-wallets": "^0.19.36",
     "@solana/web3.js": "^1.99.0",
     "@walletconnect/modal": "^2.6.0",

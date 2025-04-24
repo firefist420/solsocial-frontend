@@ -9,31 +9,23 @@ import {
   GlowWalletAdapter
 } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
-import { AuthProvider } from '../contexts/AuthContext';
-import '../styles/globals.css';
-import '@solana/wallet-adapter-react-ui/styles.css';
 
 function MyApp({ Component, pageProps }) {
   const network = WalletAdapterNetwork.Mainnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter(),
-      new SolflareWalletAdapter(),
-      new BackpackWalletAdapter(),
-      new GlowWalletAdapter()
-    ],
-    [network]
-  );
+  const wallets = useMemo(() => [
+    new PhantomWalletAdapter(),
+    new SolflareWalletAdapter(),
+    new BackpackWalletAdapter(),
+    new GlowWalletAdapter()
+  ], [network]);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <AuthProvider>
-            <Component {...pageProps} />
-          </AuthProvider>
+          <Component {...pageProps} />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
