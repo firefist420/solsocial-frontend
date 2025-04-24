@@ -24,13 +24,15 @@ export default function ProfilePage() {
   const router = useRouter();
   const { publicKey } = router.query;
   const [activeTab, setActiveTab] = useState('profile');
-  const [isClient, setIsClient] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    if (router.isReady) {
+      setIsReady(true);
+    }
+  }, [router.isReady]);
 
-  if (!isClient) return null;
+  if (!isReady) return <div>Loading...</div>;
   if (!publicKey) return <ErrorComponent message="No wallet address provided" />;
 
   return (
@@ -61,7 +63,7 @@ export default function ProfilePage() {
         
         <div className="mt-6">
           {activeTab === 'profile' && <PostList posts={[]} />}
-          {activeTab === 'nfts' && publicKey && <NFTGallery publicKey={publicKey} />}
+          {activeTab === 'nfts' && <NFTGallery publicKey={publicKey} />}
           {activeTab === 'customize' && <ProfileCustomizer />}
         </div>
       </div>
