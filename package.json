@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -32,11 +33,19 @@
     "swr": "^2.3.3"
   },
   "engines": {
-    "node": ">=18.x"
+    "node": "18.x",
+    "npm": ">=9.x"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.1.0"
+  },
+  "resolutions": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "qrcode.react/react": "^18.2.0"
   }
 }
