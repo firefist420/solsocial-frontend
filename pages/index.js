@@ -1,25 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 const WalletMultiButton = dynamic(
   () => import('@solana/wallet-adapter-react-ui').then((mod) => mod.WalletMultiButton),
-  { ssr: false }
+  { 
+    ssr: false,
+    loading: () => <div className="w-full h-10 bg-gray-700 rounded animate-pulse"></div>
+  }
 );
 
 export default function Home() {
-  const { connected, publicKey } = useWallet();
   const router = useRouter();
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const [hcaptchaLoaded, setHcaptchaLoaded] = useState(false);
-
-  useEffect(() => {
-    if (connected && publicKey) {
-      router.push('/feed');
-    }
-  }, [connected, publicKey, router]);
 
   useEffect(() => {
     const script = document.createElement('script');

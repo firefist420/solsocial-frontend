@@ -1,7 +1,20 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['assets.dexscreener.com', 'arweave.net', 'nftstorage.link'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'assets.dexscreener.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'arweave.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'nftstorage.link'
+      }
+    ]
   },
   webpack: (config) => {
     config.resolve.fallback = {
@@ -15,7 +28,8 @@ module.exports = {
     return config;
   },
   experimental: {
-    esmExternals: 'loose'
+    esmExternals: 'loose',
+    serverActions: true
   },
   output: 'standalone'
 };
