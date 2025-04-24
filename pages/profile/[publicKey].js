@@ -2,48 +2,23 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import AppLayout from '../../components/UI/AppLayout';
 import ErrorComponent from '../../components/UI/ErrorComponent';
+import SkeletonLoader from '../../components/UI/SkeletonLoader';
 
 const NFTGallery = dynamic(() => import('../../components/Profile/NFTGallery'), {
   ssr: false,
-  loading: () => <div>Loading NFTs...</div>
+  loading: () => <SkeletonLoader count={1} />
 });
 
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true
-  };
-}
-
-export async function getStaticProps({ params }) {
-  try {
-    if (!params?.publicKey) {
-      return {
-        notFound: true
-      };
-    }
-    return {
-      props: {
-        publicKey: params.publicKey
-      },
-      revalidate: 60
-    };
-  } catch (error) {
-    return {
-      notFound: true
-    };
-  }
-}
-
-export default function NFTProfilePage({ publicKey }) {
+export default function NFTProfilePage() {
   const router = useRouter();
-
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
+  const { publicKey } = router.query;
 
   if (!publicKey) {
-    return <ErrorComponent message="Invalid wallet address" />;
+    return (
+      <AppLayout>
+        <ErrorComponent message="No wallet address provided" />
+      </AppLayout>
+    );
   }
 
   return (
@@ -53,4 +28,12 @@ export default function NFTProfilePage({ publicKey }) {
       </div>
     </AppLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      publicKey: context.params.publicKey
+    }
+  };
 }

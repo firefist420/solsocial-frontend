@@ -6,12 +6,6 @@ export default function NFTGallery({ publicKey }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!publicKey) {
-      setError('No public key provided');
-      setLoading(false);
-      return;
-    }
-
     const fetchNFTs = async () => {
       try {
         setLoading(true);
@@ -26,7 +20,7 @@ export default function NFTGallery({ publicKey }) {
       }
     };
 
-    fetchNFTs();
+    if (publicKey) fetchNFTs();
   }, [publicKey]);
 
   if (loading) return <div>Loading NFTs...</div>;

@@ -1,21 +1,44 @@
-export default async function handler(req, res) {
-  const { publicKey } = req.query;
-  if (!publicKey) return res.status(400).json({ error: 'Missing publicKey' });
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import AppLayout from '../../../components/UI/AppLayout';
+import ErrorComponent from '../../../components/UI/ErrorComponent';
+import SkeletonLoader from '../../../components/UI/SkeletonLoader';
 
-  try {
-    const response = await fetch(`https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'getAssetsByOwner',
-        params: { ownerAddress: publicKey, page: 1, limit: 1000 }
-      })
-    });
-    const { result } = await response.json();
-    res.status(200).json({ nfts: result?.items || [] });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch NFTs' });
+const NFTGallery = dynamic(() => import('../../../components/Profile/NFTGallery'), {
+  ssr: false,
+  loading: () => <SkeletonLoader count={1} />
+});
+
+export default function NFTProfilePage() {
+  const router = useRouter();
+  
+  // Handle case where router isn't ready yet
+  if (!router.isReady) {
+    return <SkeletonLoader count={3} />;
   }
+
+  const { publicKey } = router.query;
+
+  if (!publicKey) {
+    return (
+      <AppLayout>
+        <ErrorComponent message="No wallet address provided" />
+      </AppLayout>
+    );
+  }
+
+  return (
+    <AppLayout>
+      <div className="p-6">
+        <NFTGallery publicKey={publicKey} />
+      </div>
+    </AppLayout>
+  );
+}
+
+// Disable static generation for this page
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
 }
