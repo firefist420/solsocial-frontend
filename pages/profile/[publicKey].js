@@ -11,25 +11,28 @@ const NFTGallery = dynamic(() => import('../../components/Profile/NFTGallery'), 
 export async function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking'
+    fallback: true
   };
 }
 
-export async function getStaticProps(context) {
-  const { publicKey } = context.params;
-
-  if (!publicKey) {
+export async function getStaticProps({ params }) {
+  try {
+    if (!params?.publicKey) {
+      return {
+        notFound: true
+      };
+    }
+    return {
+      props: {
+        publicKey: params.publicKey
+      },
+      revalidate: 60
+    };
+  } catch (error) {
     return {
       notFound: true
     };
   }
-
-  return {
-    props: {
-      publicKey
-    },
-    revalidate: 60
-  };
 }
 
 export default function NFTProfilePage({ publicKey }) {
