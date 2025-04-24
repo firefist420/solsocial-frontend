@@ -16,5 +16,6 @@ module.exports = {
   },
   experimental: {
     esmExternals: 'loose'
-  }
+  },
+  output: 'standalone'
 };
