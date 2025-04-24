@@ -19,7 +19,7 @@
     "@solana/wallet-adapter-react": "0.15.22",
     "@solana/wallet-adapter-react-ui": "0.9.22",
     "@solana/wallet-adapter-solflare": "0.6.22",
-    "@solana/web3.js": "^1.98.2",
+    "@solana/web3.js": "^1.98.0",
     "@walletconnect/modal": "^2.6.0",
     "axios": "^1.5.0",
     "crypto-browserify": "^3.12.0",
